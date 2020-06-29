@@ -4,6 +4,7 @@ import in.rsh.hotel.booking.model.Person;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO: Use in-memory DB
 public class PersonStore {
 
   static Map<Integer, Person> persons = new HashMap<>();

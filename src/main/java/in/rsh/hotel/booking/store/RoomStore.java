@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+//TODO: Use in-memory DB
 public class RoomStore {
 
   static Map<Integer, List<Room>> floorToAvailableRoomsMapping = new TreeMap<>();

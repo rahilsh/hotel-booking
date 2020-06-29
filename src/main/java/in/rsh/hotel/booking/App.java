@@ -14,7 +14,7 @@ import in.rsh.hotel.booking.model.Status;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Move this to tests
+// TODO: Move driver code to tests & Convert this app to a spring boot app
 public class App {
   public static void main(String[] args) {
     Person p1 = new Person(1, "a", 20);
