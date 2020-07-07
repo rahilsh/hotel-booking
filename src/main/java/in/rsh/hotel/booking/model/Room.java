@@ -1,37 +1,13 @@
 package in.rsh.hotel.booking.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Getter
 public class Room {
-  private int id;
-  private int floorId;
-  private Status status;
-
-  public Room(int id, int floorId, Status status) {
-    this.id = id;
-    this.floorId = floorId;
-    this.status = status;
-  }
-
-  public Status getStatus() {
-    return status;
-  }
-
-  public void setStatus(Status status) {
-    this.status = status;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getFloorId() {
-    return floorId;
-  }
-
-  public void setFloorId(int floorId) {
-    this.floorId = floorId;
-  }
+  private final int id;
+  private final int floorId;
+  @Setter private Status status;
 }
