@@ -3,6 +3,7 @@ package in.rsh.hotel.booking;
 import in.rsh.hotel.booking.model.Booking;
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.model.Room;
+import in.rsh.hotel.booking.model.Status;
 import in.rsh.hotel.booking.service.BookingService;
 import in.rsh.hotel.booking.stats.GroupByAgeStats;
 import in.rsh.hotel.booking.stats.Stats;
@@ -10,11 +11,12 @@ import in.rsh.hotel.booking.store.BookingStore;
 import in.rsh.hotel.booking.store.PersonStore;
 import in.rsh.hotel.booking.store.RoomStore;
 import in.rsh.hotel.booking.strategy.TopToBottomStrategy;
-import in.rsh.hotel.booking.model.Status;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 // TODO: Move driver code to tests & Convert this app to a spring boot app
+@Slf4j
 public class App {
   public static void main(String[] args) {
     Person p1 = new Person(1, "a", 20);
@@ -57,17 +59,16 @@ public class App {
     BookingStore bookingStore = new BookingStore();
     List<Booking> bookings = bookingStore.getBookings();
     for (Booking booking : bookings) {
-      System.out.printf(
-          "Id: %s, Person Id: %s, Person Name: %s, RoomId: %s",
+      log.info(
+          "Id: {}, Person Id: {}, Person Name: {}, RoomId: {}",
           booking.getId(),
           booking.getPersonId(),
           getPersonName(booking.getPersonId(), persons),
           booking.getRoomId());
-      System.out.println();
     }
 
     Stats stats = new GroupByAgeStats();
-    System.out.println(stats.compute(bookings));
+    log.info("stats: {}", stats.compute(bookings));
   }
 
   private static String getPersonName(int personId, List<Person> persons) {
