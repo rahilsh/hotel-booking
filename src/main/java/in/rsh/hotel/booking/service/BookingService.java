@@ -38,8 +38,8 @@ public class BookingService {
     Booking booking =
         new Booking(
             UUID.randomUUID().toString(),
-            person.getId(),
-            nextAvailableRoom.getId(),
+            person,
+            nextAvailableRoom,
             System.currentTimeMillis(),
             System.currentTimeMillis() + 3600L);
     bookingStore.add(booking);
@@ -50,17 +50,15 @@ public class BookingService {
   public boolean checkOut(Booking booking) {
     booking.setStatus(BookingStatus.ENDED);
     bookingStore.updateStatus(booking.getId(), BookingStatus.ENDED);
-    Room room = roomStore.getRoom(booking.getRoomId());
+    Room room = booking.getRoom();
     room.setStatus(RoomStatus.AVAILABLE);
     roomStore.addRoom(room, false);
-    roomStore.updateRoomStatus(booking.getRoomId(), RoomStatus.AVAILABLE);
+    roomStore.updateRoomStatus(booking.getRoom().getId(), RoomStatus.AVAILABLE);
     return true;
   }
 
   public Optional<Booking> getAnyActiveBooking() {
-    return bookingStore
-        .getBookings()
-        .stream()
+    return bookingStore.getBookings().stream()
         .filter(booking -> booking.getStatus().equals(BookingStatus.BOOKED))
         .findFirst();
   }

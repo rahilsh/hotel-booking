@@ -33,22 +33,22 @@ public class App {
 
     checkInAllRooms(personStore, bookingService);
 
-    checkOutARoom(personStore, bookingService);
+    checkOutAndCheckInRoom(bookingService);
 
     List<Booking> bookings = bookingService.getBookings();
 
-    printBookings(bookings, personStore);
+    printBookings(bookings);
 
     log.info("stats: {}", injector.getInstance(GroupByAgeStats.class).compute(bookings));
   }
 
-  private static void checkOutARoom(PersonStore personStore, BookingService bookingService) {
+  private static void checkOutAndCheckInRoom(BookingService bookingService) {
     bookingService
         .getAnyActiveBooking()
         .ifPresent(
             booking -> {
               bookingService.checkOut(booking);
-              bookingService.checkIn(personStore.get(booking.getPersonId()));
+              bookingService.checkIn(booking.getPerson());
             });
   }
 
@@ -58,15 +58,15 @@ public class App {
     }
   }
 
-  private static List<Booking> printBookings(List<Booking> bookings, PersonStore personStore) {
+  private static List<Booking> printBookings(List<Booking> bookings) {
 
     for (Booking booking : bookings) {
       log.info(
           "Id: {}, Person Id: {}, Person Name: {}, RoomId: {}, status {}",
           booking.getId(),
-          booking.getPersonId(),
-          personStore.get(booking.getPersonId()).getName(),
-          booking.getRoomId(),
+          booking.getPerson().getId(),
+          booking.getPerson().getName(),
+          booking.getRoom(),
           booking.getStatus().name());
     }
     return bookings;
