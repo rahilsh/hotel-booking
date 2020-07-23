@@ -1,17 +1,23 @@
 package in.rsh.hotel.booking.stats;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import in.rsh.hotel.booking.model.Booking;
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.store.PersonStore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
+@Singleton
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class GroupByAgeStats implements Stats {
+
+  private final PersonStore personStore;
 
   @Override
   public Map<String, Integer> compute(List<Booking> bookings) {
-    PersonStore personStore = new PersonStore();
     Map<String, Integer> ageRangeToCountMap = new HashMap<>();
     for (Booking booking : bookings) {
       Person person = personStore.get(booking.getPersonId());
@@ -28,14 +34,13 @@ public class GroupByAgeStats implements Stats {
 
   private String getRange(int bucketId) {
     switch (bucketId) {
-      case 0:
-        return "0-9";
       case 1:
         return "10-19";
       case 2:
         return "20-29";
       case 3:
         return "30-39";
+      case 0:
       default:
         return "0-9";
     }

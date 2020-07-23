@@ -9,5 +9,10 @@ import lombok.Setter;
 public class Room {
   private final int id;
   private final int floorId;
-  @Setter private Status status;
+  @Setter private RoomStatus status;
+
+  public enum RoomStatus {
+    AVAILABLE,
+    OCCUPIED
+  }
 }

@@ -1,12 +1,14 @@
 package in.rsh.hotel.booking.store;
 
+import com.google.inject.Singleton;
 import in.rsh.hotel.booking.model.Booking;
-import in.rsh.hotel.booking.model.BookingStatus;
+import in.rsh.hotel.booking.model.Booking.BookingStatus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 //TODO: Use in-memory DB
+@Singleton
 public class BookingStore {
 
   static List<Booking> bookings = new ArrayList<>();

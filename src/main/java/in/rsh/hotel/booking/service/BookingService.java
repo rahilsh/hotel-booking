@@ -1,29 +1,33 @@
 package in.rsh.hotel.booking.service;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import in.rsh.hotel.booking.model.Booking;
-import in.rsh.hotel.booking.model.BookingStatus;
+import in.rsh.hotel.booking.model.Booking.BookingStatus;
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.model.Room;
-import in.rsh.hotel.booking.model.Status;
+import in.rsh.hotel.booking.model.Room.RoomStatus;
 import in.rsh.hotel.booking.store.BookingStore;
 import in.rsh.hotel.booking.store.RoomStore;
 import in.rsh.hotel.booking.strategy.BookingStrategy;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
+@Singleton
+@RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class BookingService {
 
   private final BookingStrategy defaultStrategy;
-
-  public BookingService(BookingStrategy defaultStrategy) {
-    this.defaultStrategy = defaultStrategy;
-  }
+  private final BookingStore bookingStore;
+  private final RoomStore roomStore;
 
   public Booking checkIn(Person person) {
     return checkIn(person, defaultStrategy);
   }
 
   public Booking checkIn(Person person, BookingStrategy bookingStrategy) {
-    RoomStore roomStore = new RoomStore();
     Room nextAvailableRoom =
         bookingStrategy.getNextAvailableRoom(roomStore.getFloorToAvailableRoomsMapping());
     if (nextAvailableRoom == null) {
@@ -31,7 +35,6 @@ public class BookingService {
     }
     roomStore.markRoomAsBooked(nextAvailableRoom);
 
-    BookingStore bookingStore = new BookingStore();
     Booking booking =
         new Booking(
             UUID.randomUUID().toString(),
@@ -46,12 +49,23 @@ public class BookingService {
 
   public boolean checkOut(Booking booking) {
     booking.setStatus(BookingStatus.ENDED);
-    new BookingStore().updateStatus(booking.getId(), BookingStatus.ENDED);
-    RoomStore roomStore = new RoomStore();
+    bookingStore.updateStatus(booking.getId(), BookingStatus.ENDED);
     Room room = roomStore.getRoom(booking.getRoomId());
-    room.setStatus(Status.AVAILABLE);
+    room.setStatus(RoomStatus.AVAILABLE);
     roomStore.addRoom(room, false);
-    roomStore.updateRoomStatus(booking.getRoomId(), Status.AVAILABLE);
+    roomStore.updateRoomStatus(booking.getRoomId(), RoomStatus.AVAILABLE);
     return true;
+  }
+
+  public Optional<Booking> getAnyActiveBooking() {
+    return bookingStore
+        .getBookings()
+        .stream()
+        .filter(booking -> booking.getStatus().equals(BookingStatus.BOOKED))
+        .findFirst();
+  }
+
+  public List<Booking> getBookings() {
+    return bookingStore.getBookings();
   }
 }

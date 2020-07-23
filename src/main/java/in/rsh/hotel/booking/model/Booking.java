@@ -1,5 +1,7 @@
 package in.rsh.hotel.booking.model;
 
+import static in.rsh.hotel.booking.model.Booking.BookingStatus.BOOKED;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,5 +21,11 @@ public class Booking {
     this.roomId = roomId;
     this.startTime = startTime;
     this.endTime = endTime;
+    this.status = BOOKED;
+  }
+
+  public enum BookingStatus {
+    BOOKED,
+    ENDED
   }
 }
