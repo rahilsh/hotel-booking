@@ -1,13 +1,26 @@
 package in.rsh.hotel.booking.model;
 
-import lombok.AllArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import lombok.Getter;
+import lombok.Setter;
 
+@Entity
 @Getter
-@AllArgsConstructor
 public class Person {
 
-  private final int id;
-  private final String name;
-  private final int age;
+  @Id @GeneratedValue
+  @Setter
+  private int id;
+
+  @Column(nullable = false)
+  private String name;
+
+  @Column(nullable = false)
+  private int age;
+
+  @Column(nullable = false)
+  private String emailId;
 }

@@ -9,7 +9,7 @@ public class BottomToTopStrategy implements BookingStrategy {
 
   public Room getNextAvailableRoom(Map<Integer, List<Room>> floorToAvailableRoomsMapping) {
     return floorToAvailableRoomsMapping
-        .get(((TreeMap) floorToAvailableRoomsMapping).firstKey())
+        .get(new TreeMap<>(floorToAvailableRoomsMapping).firstKey())
         .get(0);
   }
 }

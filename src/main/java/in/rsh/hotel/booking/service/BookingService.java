@@ -1,69 +1,106 @@
 package in.rsh.hotel.booking.service;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import static in.rsh.hotel.booking.model.Booking.buildBooking;
+
 import in.rsh.hotel.booking.model.Booking;
 import in.rsh.hotel.booking.model.Booking.BookingStatus;
-import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
-import in.rsh.hotel.booking.store.BookingStore;
-import in.rsh.hotel.booking.store.RoomStore;
+import in.rsh.hotel.booking.repository.BookingRepository;
 import in.rsh.hotel.booking.strategy.BookingStrategy;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import lombok.RequiredArgsConstructor;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Singleton
-@RequiredArgsConstructor(onConstructor = @__(@Inject))
+@Service
 public class BookingService {
 
+  private final BookingRepository bookingRepository;
+  private final RoomService roomService;
+  private final PersonService personService;
   private final BookingStrategy defaultStrategy;
-  private final BookingStore bookingStore;
-  private final RoomStore roomStore;
 
-  public Booking checkIn(Person person) {
-    return checkIn(person, defaultStrategy);
+  @Autowired
+  public BookingService(
+      BookingRepository bookingRepository,
+      RoomService roomService,
+      PersonService personService,
+      BookingStrategy defaultStrategy) {
+    this.bookingRepository = bookingRepository;
+    this.roomService = roomService;
+    this.personService = personService;
+    this.defaultStrategy = defaultStrategy;
   }
 
-  public Booking checkIn(Person person, BookingStrategy bookingStrategy) {
-    Room nextAvailableRoom =
-        bookingStrategy.getNextAvailableRoom(roomStore.getFloorToAvailableRoomsMapping());
-    if (nextAvailableRoom == null) {
-      return null;
+  public List<Booking> getAllBookings() {
+    List<Booking> bookings = new ArrayList<>();
+    bookingRepository.findAll().forEach(bookings::add);
+    return bookings;
+  }
+
+  public Booking getBookingById(int id) {
+    return bookingRepository.findById(id).get();
+  }
+
+  @Transactional
+  public Booking updateBookingStatus(int bookingId, BookingStatus status) {
+    if (status.equals(BookingStatus.BOOKED)) {
+      throw new IllegalArgumentException();
     }
-    roomStore.markRoomAsBooked(nextAvailableRoom);
+    final Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
+    if (!optionalBooking.isPresent()) {
+      throw new IllegalArgumentException();
+    }
+    Booking booking = optionalBooking.get();
+    if (!booking.getStatus().equals(BookingStatus.BOOKED)) {
+      throw new IllegalArgumentException();
+    }
+    final Room room = booking.getRoom();
+    room.setStatus(RoomStatus.AVAILABLE);
+    roomService.saveOrUpdate(room);
+    booking.setStatus(status);
+    return bookingRepository.save(booking);
+  }
+
+  @Transactional
+  public Booking bookRoomByRoomId(int personId, int roomId, long startTime, long endTime) {
+    Room room = roomService.getRoomById(roomId);
+
+    if (!room.getStatus().equals(RoomStatus.AVAILABLE)) {
+      throw new IllegalArgumentException();
+    }
+    room.setStatus(RoomStatus.OCCUPIED);
+
+    final Booking booking =
+        buildBooking(startTime, endTime, room, personService.getPersonById(personId));
+
+    roomService.saveOrUpdate(room);
+    return bookingRepository.save(booking);
+  }
+
+  @Transactional
+  public Booking bookRoomByStrategy(int personId, long startTime, long endTime) {
+
+    final Room nextAvailableRoom = getNextAvailableRoom();
+    nextAvailableRoom.setStatus(RoomStatus.OCCUPIED);
 
     Booking booking =
-        new Booking(
-            UUID.randomUUID().toString(),
-            person,
-            nextAvailableRoom,
-            System.currentTimeMillis(),
-            System.currentTimeMillis() + 3600L);
-    bookingStore.add(booking);
-
-    return booking;
+        buildBooking(startTime, endTime, nextAvailableRoom, personService.getPersonById(personId));
+    roomService.saveOrUpdate(nextAvailableRoom);
+    return bookingRepository.save(booking);
   }
 
-  public boolean checkOut(Booking booking) {
-    booking.setStatus(BookingStatus.ENDED);
-    bookingStore.updateStatus(booking.getId(), BookingStatus.ENDED);
-    Room room = booking.getRoom();
-    room.setStatus(RoomStatus.AVAILABLE);
-    roomStore.addRoom(room, false);
-    roomStore.updateRoomStatus(booking.getRoom().getId(), RoomStatus.AVAILABLE);
-    return true;
-  }
-
-  public Optional<Booking> getAnyActiveBooking() {
-    return bookingStore.getBookings().stream()
-        .filter(booking -> booking.getStatus().equals(BookingStatus.BOOKED))
-        .findFirst();
-  }
-
-  public List<Booking> getBookings() {
-    return bookingStore.getBookings();
+  // TODO: Use priority queue
+  private Room getNextAvailableRoom() {
+    List<Room> availableRooms = roomService.getRoomByStatus(RoomStatus.AVAILABLE);
+    if (availableRooms.isEmpty()) {
+      throw new IllegalArgumentException("No rooms available");
+    }
+    return defaultStrategy.getNextAvailableRoom(
+        availableRooms.stream().collect(Collectors.groupingBy(Room::getFloorId)));
   }
 }

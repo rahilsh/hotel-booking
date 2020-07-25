@@ -15,7 +15,7 @@ public class TopToBottomStrategy implements BookingStrategy {
       return null;
     }
     return floorToAvailableRoomsMapping
-        .get(((TreeMap) floorToAvailableRoomsMapping).lastKey())
+        .get(new TreeMap<>(floorToAvailableRoomsMapping).lastKey())
         .get(0);
   }
 }
