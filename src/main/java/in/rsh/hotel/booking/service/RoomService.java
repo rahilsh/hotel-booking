@@ -26,11 +26,18 @@ public class RoomService {
   }
 
   public Room getRoomById(int id) {
-    final Optional<Room> optionalRoom = roomRepository.findById(id);
+    return getIfPresentOrThrow(roomRepository.findById(id));
+  }
+
+  private Room getIfPresentOrThrow(Optional<Room> optionalRoom) {
     if (!optionalRoom.isPresent()) {
       throw new IllegalArgumentException();
     }
     return optionalRoom.get();
+  }
+
+  public Room getRoomByIdAndStatus(int id, RoomStatus status) {
+    return getIfPresentOrThrow(roomRepository.findByIdAndStatus(id, status));
   }
 
   public Room saveOrUpdate(Room room) {

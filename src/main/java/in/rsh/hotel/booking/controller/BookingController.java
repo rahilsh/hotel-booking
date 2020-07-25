@@ -28,7 +28,7 @@ public class BookingController {
   }
 
   @GetMapping
-  public List<Booking> getAllBookings() {
+  public Iterable<Booking> getAllBookings() {
     return bookingService.getAllBookings();
   }
 

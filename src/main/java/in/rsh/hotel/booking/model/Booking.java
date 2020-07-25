@@ -42,6 +42,19 @@ public class Booking {
     return booking;
   }
 
+  public static void validateNewStatus(BookingStatus status) {
+    if (status.equals(BookingStatus.BOOKED)) {
+      throw new IllegalArgumentException("Cannot update status as BOOKED");
+    }
+  }
+
+  public static void validateStateTransition(BookingStatus oldStatus, BookingStatus newStatus) {
+    if (!oldStatus.equals(BookingStatus.BOOKED)) {
+      throw new IllegalArgumentException(
+          String.format("State transition from %s to %s not allowed", oldStatus, newStatus));
+    }
+  }
+
   public enum BookingStatus {
     BOOKED,
     CANCELLED,
