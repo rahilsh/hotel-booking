@@ -39,6 +39,7 @@ public class RoomController {
   }
 
   @PostMapping
+  //TODO: Replace Hotel with DTO
   public Room saveRoom(@RequestBody Room room) {
     return roomService.saveOrUpdate(room);
   }

@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/hotels")
 public class HotelController {
 
   private final HotelService hotelService;
@@ -21,22 +23,23 @@ public class HotelController {
     this.hotelService = hotelService;
   }
 
-  @GetMapping("/hotels")
+  @GetMapping
   public List<Hotel> getAllHotels() {
     return hotelService.getAllHotels();
   }
 
-  @GetMapping("/hotels/{id}")
+  @GetMapping("/{id}")
   public Hotel getHotel(@PathVariable("id") int id) {
     return hotelService.getHotelById(id);
   }
 
-  @DeleteMapping("/hotels/{id}")
+  @DeleteMapping("/{id}")
   public void deleteHotel(@PathVariable("id") int id) {
     hotelService.delete(id);
   }
 
-  @PostMapping("/hotels")
+  @PostMapping
+  //TODO: Replace Hotel with DTO
   public int saveHotel(@RequestBody Hotel hotel) {
     hotelService.saveOrUpdate(hotel);
     return hotel.getId();

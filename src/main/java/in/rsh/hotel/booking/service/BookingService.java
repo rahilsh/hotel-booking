@@ -43,7 +43,11 @@ public class BookingService {
   }
 
   public Booking getBookingById(int id) {
-    return bookingRepository.findById(id).get();
+    final Optional<Booking> optionalBooking = bookingRepository.findById(id);
+    if (!optionalBooking.isPresent()) {
+      throw new IllegalArgumentException("Booking not found: " + id);
+    }
+    return optionalBooking.get();
   }
 
   @Transactional

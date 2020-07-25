@@ -13,6 +13,5 @@ public interface RoomRepository extends CrudRepository<Room, Integer> {
   @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
   Optional<Room> findById(int id);
 
-  @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
   List<Room> findByStatus(RoomStatus status);
 }

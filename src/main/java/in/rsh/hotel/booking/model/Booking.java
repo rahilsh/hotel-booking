@@ -42,7 +42,6 @@ public class Booking {
     return booking;
   }
 
-
   public enum BookingStatus {
     BOOKED,
     CANCELLED,

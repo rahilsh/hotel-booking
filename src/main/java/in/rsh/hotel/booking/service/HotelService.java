@@ -4,6 +4,7 @@ import in.rsh.hotel.booking.model.Hotel;
 import in.rsh.hotel.booking.repository.HotelRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,11 @@ public class HotelService {
   }
 
   public Hotel getHotelById(int id) {
-    return hotelRepository.findById(id).get();
+    final Optional<Hotel> optionalHotel = hotelRepository.findById(id);
+    if (!optionalHotel.isPresent()) {
+      throw new IllegalArgumentException("Hotel not found: " + id);
+    }
+    return optionalHotel.get();
   }
 
   public void saveOrUpdate(Hotel hotel) {

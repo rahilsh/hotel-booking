@@ -11,7 +11,7 @@ public class TopToBottomStrategy implements BookingStrategy {
 
   public Room getNextAvailableRoom(Map<Integer, List<Room>> floorToAvailableRoomsMapping) {
     if (floorToAvailableRoomsMapping.size() == 0) {
-      log.warn("No Free Rooms");
+      log.warn("Rooms not available");
       return null;
     }
     return floorToAvailableRoomsMapping
