@@ -3,7 +3,6 @@ package in.rsh.hotel.booking.service;
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
 import in.rsh.hotel.booking.repository.RoomRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,8 @@ public class RoomService {
     this.roomRepository = roomRepository;
   }
 
-  public List<Room> getAllRooms() {
-    List<Room> rooms = new ArrayList<>();
-    roomRepository.findAll().forEach(rooms::add);
-    return rooms;
+  public Iterable<Room> getAllRooms() {
+    return roomRepository.findAll();
   }
 
   public Room getRoomById(int id) {

@@ -3,7 +3,6 @@ package in.rsh.hotel.booking.controller;
 import in.rsh.hotel.booking.model.Booking;
 import in.rsh.hotel.booking.model.Booking.BookingStatus;
 import in.rsh.hotel.booking.service.BookingService;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,11 +38,12 @@ public class BookingController {
 
   @PostMapping
   public Booking createBooking(@RequestBody CreateBookingRequest request) {
-    if (request.getRoomId() != 0) {
+    if (request.getRoomId() > 0) {
       return bookingService.bookRoomByRoomId(
           request.getPersonId(), request.getRoomId(), request.getStartTime(), request.getEndTime());
     }
-    return bookingService.bookRoomByStrategy(request.getPersonId(), request.getStartTime(), request.getEndTime());
+    return bookingService.bookRoomByStrategy(
+        request.getPersonId(), request.getStartTime(), request.getEndTime());
   }
 
   @PatchMapping("/{id}")

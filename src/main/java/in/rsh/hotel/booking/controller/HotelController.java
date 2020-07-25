@@ -2,7 +2,6 @@ package in.rsh.hotel.booking.controller;
 
 import in.rsh.hotel.booking.model.Hotel;
 import in.rsh.hotel.booking.service.HotelService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,7 @@ public class HotelController {
   }
 
   @GetMapping
-  public List<Hotel> getAllHotels() {
+  public Iterable<Hotel> getAllHotels() {
     return hotelService.getAllHotels();
   }
 
@@ -39,7 +38,7 @@ public class HotelController {
   }
 
   @PostMapping
-  //TODO: Replace Hotel with DTO
+  // TODO: Replace Hotel with DTO
   public int saveHotel(@RequestBody Hotel hotel) {
     hotelService.saveOrUpdate(hotel);
     return hotel.getId();

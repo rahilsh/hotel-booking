@@ -12,24 +12,27 @@ import lombok.Setter;
 
 @Getter
 @Entity
-@Setter
 public class Booking {
 
   @Id @GeneratedValue private int id;
 
   @ManyToOne(optional = false)
+  @Setter
   private Person person;
 
-  @ManyToOne private Room room;
+  @ManyToOne @Setter private Room room;
 
   @Column(nullable = false)
+  @Setter
   private long startTime;
 
   @Column(nullable = false)
+  @Setter
   private long endTime;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
+  @Setter
   private BookingStatus status;
 
   public static Booking buildBooking(long startTime, long endTime, Room room, Person person) {

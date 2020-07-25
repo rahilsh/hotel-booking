@@ -9,8 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class HotelBookingConfig {
 
   @Bean
-  public BookingStrategy provideBookingStrategy(){
+  public BookingStrategy provideBookingStrategy() {
     return new TopToBottomStrategy();
   }
-
 }

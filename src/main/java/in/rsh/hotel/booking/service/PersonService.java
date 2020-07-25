@@ -2,8 +2,6 @@ package in.rsh.hotel.booking.service;
 
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.repository.PersonRepository;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +16,8 @@ public class PersonService {
     this.personRepository = personRepository;
   }
 
-  public List<Person> getAllPersons() {
-    List<Person> persons = new ArrayList<>();
-    personRepository.findAll().forEach(persons::add);
-    return persons;
+  public Iterable<Person> getAllPersons() {
+    return personRepository.findAll();
   }
 
   public Person getPersonById(int id) {

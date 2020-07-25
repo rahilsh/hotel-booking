@@ -2,7 +2,6 @@ package in.rsh.hotel.booking.controller;
 
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.service.PersonService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,7 @@ public class PersonController {
   }
 
   @GetMapping
-  public List<Person> getAllPersons() {
+  public Iterable<Person> getAllPersons() {
     return personService.getAllPersons();
   }
 
