@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import lombok.Getter;
@@ -15,11 +13,10 @@ import org.hibernate.envers.Audited;
 @Getter
 @Entity
 @Audited
-public class Room {
+public class Room extends AbstractEntity {
 
   @Version protected int versionNumber = 0;
 
-  @Id @GeneratedValue private int id;
   private int floorId;
 
   @ManyToOne(optional = false)
