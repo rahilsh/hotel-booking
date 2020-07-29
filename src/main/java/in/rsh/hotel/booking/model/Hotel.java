@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.Getter;
+import org.hibernate.envers.Audited;
 
 @Getter
 @Entity
+@Audited
 public class Hotel {
   @Id @GeneratedValue private int id;
 

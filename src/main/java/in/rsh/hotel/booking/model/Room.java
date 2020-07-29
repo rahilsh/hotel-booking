@@ -10,9 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 @Getter
 @Entity
+@Audited
 public class Room {
 
   @Version protected int versionNumber = 0;

@@ -9,9 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 @Getter
 @Entity
+@Audited
 public class Booking {
 
   @Id @GeneratedValue private int id;

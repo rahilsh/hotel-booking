@@ -89,7 +89,6 @@ public class BookingService {
   private void markRoomAsAvailable(Booking booking) {
     final Room room = booking.getRoom();
     room.setStatus(RoomStatus.AVAILABLE);
-    roomService.saveOrUpdate(room);
   }
 
   private Booking bookRoom(int personId, long startTime, long endTime, Room room) {
@@ -99,7 +98,6 @@ public class BookingService {
 
   private void markRoomAsOccupied(Room room) {
     room.setStatus(RoomStatus.OCCUPIED);
-    roomService.saveOrUpdate(room);
   }
 
   // TODO: Use priority queue
