@@ -16,6 +16,6 @@ public class Person extends AbstractEntity {
   @Column(nullable = false)
   private int age;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String emailId;
 }
