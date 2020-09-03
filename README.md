@@ -24,7 +24,7 @@ Features
 * Complete Object Oriented Design which is highly extensible
 * Rest APIs for easy adoption
 * Handles concurrency issues when multiple user selects same room.
-* Support for defining strategy to assing a room
+* Support for defining strategy to assign a room
 ```
 
 ```
