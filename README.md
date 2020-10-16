@@ -1,5 +1,5 @@
 # hotel-booking
-Simple hotel booking backend application built on spring boot
+Simple hotel room booking backend application built on spring boot
 
 ```
 Steps to start app
