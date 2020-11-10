@@ -33,6 +33,6 @@ Future development
 * Integration with Payment module
 * Minimal user interface
 * Use priority queue to assign a room more efficiently
-* Authentice and Authorize API calls
+* Authenticate and Authorize API calls
 * User login support
 ```
