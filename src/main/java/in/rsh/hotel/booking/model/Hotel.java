@@ -1,7 +1,7 @@
 package in.rsh.hotel.booking.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import org.hibernate.envers.Audited;
 

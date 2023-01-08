@@ -1,11 +1,11 @@
 package in.rsh.hotel.booking.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -15,7 +15,8 @@ import org.hibernate.envers.Audited;
 @Audited
 public class Room extends AbstractEntity {
 
-  @Version protected int versionNumber = 0;
+  @Version
+  protected int versionNumber = 0;
 
   private int floorId;
 

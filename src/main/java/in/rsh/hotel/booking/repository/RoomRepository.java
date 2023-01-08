@@ -2,9 +2,9 @@ package in.rsh.hotel.booking.repository;
 
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.LockModeType;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.repository.CrudRepository;
 

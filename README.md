@@ -13,7 +13,7 @@ Steps to start app
 Tools
 
 * Access `http://localhost:8080/swagger-ui.html` to view API docs(swagger ui)
-* Access H2 DB console on `http://localhost:8080/h2-console`
+* Access H2 DB console on `http://localhost:8080/console`. Check jdbc url in startup logs, it will look something like `jdbc:h2:mem:8d8da8f9-98b1-4f59-a3d7-0412d25782c5`
 
 ```
 
