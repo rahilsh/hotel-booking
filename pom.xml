@@ -26,6 +26,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+      <version>3.0.6</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -40,22 +41,12 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
+      <version>2.1.214</version>
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-envers</artifactId>
-      <version>6.2.1.Final</version>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.persistence</groupId>
-          <artifactId>persistence-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

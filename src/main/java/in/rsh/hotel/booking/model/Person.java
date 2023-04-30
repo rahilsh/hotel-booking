@@ -3,11 +3,9 @@ package in.rsh.hotel.booking.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Getter
-@Audited
 public class Person extends AbstractEntity {
 
   @Column(nullable = false)

@@ -7,11 +7,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.envers.Audited;
 
 @Getter
 @Entity
-@Audited
 public class Booking extends AbstractEntity {
 
   @ManyToOne(optional = false)
