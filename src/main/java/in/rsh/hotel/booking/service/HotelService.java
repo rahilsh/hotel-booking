@@ -22,7 +22,7 @@ public class HotelService {
 
   public Hotel getHotelById(int id) {
     final Optional<Hotel> optionalHotel = hotelRepository.findById(id);
-    if (!optionalHotel.isPresent()) {
+    if (optionalHotel.isEmpty()) {
       throw new IllegalArgumentException("Hotel not found: " + id);
     }
     return optionalHotel.get();

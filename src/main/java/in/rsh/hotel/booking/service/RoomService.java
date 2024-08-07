@@ -27,7 +27,7 @@ public class RoomService {
   }
 
   private Room getIfPresentOrThrow(Optional<Room> optionalRoom) {
-    if (!optionalRoom.isPresent()) {
+    if (optionalRoom.isEmpty()) {
       throw new IllegalArgumentException();
     }
     return optionalRoom.get();
