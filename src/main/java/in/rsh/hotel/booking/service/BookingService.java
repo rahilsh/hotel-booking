@@ -42,7 +42,7 @@ public class BookingService {
 
   public Booking getBookingById(int id) {
     final Optional<Booking> optionalBooking = bookingRepository.findById(id);
-    if (!optionalBooking.isPresent()) {
+    if (optionalBooking.isEmpty()) {
       throw new IllegalArgumentException("Booking not found: " + id);
     }
     return optionalBooking.get();

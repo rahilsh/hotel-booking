@@ -23,7 +23,7 @@ public class PersonService {
   public Person getPersonById(int id) {
 
     final Optional<Person> optionalPerson = personRepository.findById(id);
-    if (!optionalPerson.isPresent()) {
+    if (optionalPerson.isEmpty()) {
       throw new IllegalArgumentException();
     }
     return optionalPerson.get();

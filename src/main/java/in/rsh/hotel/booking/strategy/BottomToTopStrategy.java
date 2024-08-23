@@ -12,6 +12,6 @@ public class BottomToTopStrategy implements BookingStrategy {
         getFloorToAvailableRoomsMapping(availableRooms);
     return floorToAvailableRoomsMapping
         .get(new TreeMap<>(floorToAvailableRoomsMapping).firstKey())
-        .get(0);
+        .getFirst();
   }
 }

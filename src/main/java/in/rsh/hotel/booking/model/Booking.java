@@ -50,7 +50,7 @@ public class Booking extends AbstractEntity {
   public static void validateStateTransition(BookingStatus oldStatus, BookingStatus newStatus) {
     if (!oldStatus.equals(BookingStatus.BOOKED)) {
       throw new IllegalArgumentException(
-          String.format("State transition from %s to %s not allowed", oldStatus, newStatus));
+          "State transition from %s to %s not allowed".formatted(oldStatus, newStatus));
     }
   }
 
