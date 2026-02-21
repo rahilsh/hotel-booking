@@ -1,0 +1,13 @@
+name: Mirror to Codeberg
+on: [push, delete]
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to Codeberg
+        run: |
+          git remote add codeberg https://rahils:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/rahils/${{ github.event.repository.name }}.git
+          git push codeberg --mirror
