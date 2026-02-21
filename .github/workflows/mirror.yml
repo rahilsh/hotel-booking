@@ -2,10 +2,10 @@ name: Mirror to Codeberg
 on:
   push:
     branches:
-      - master
+      - main
   delete:
     branches:
-      - master
+      - main
   workflow_dispatch:
 jobs:
   mirror:
