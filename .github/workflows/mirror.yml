@@ -1,5 +1,12 @@
 name: Mirror to Codeberg
-on: [push, delete]
+on:
+  push:
+    branches:
+      - master
+  delete:
+    branches:
+      - master
+  workflow_dispatch:
 jobs:
   mirror:
     runs-on: ubuntu-latest
