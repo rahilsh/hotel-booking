@@ -32,6 +32,9 @@ public class Booking extends AbstractEntity {
   private BookingStatus status;
 
   public static Booking buildBooking(long startTime, long endTime, Room room, Person person) {
+    if (startTime >= endTime) {
+      throw new IllegalArgumentException("Start time must be before end time");
+    }
     final Booking booking = new Booking();
     booking.setRoom(room);
     booking.setPerson(person);
@@ -55,6 +58,7 @@ public class Booking extends AbstractEntity {
   }
 
   public enum BookingStatus {
+    PENDING,
     BOOKED,
     CANCELLED,
     ENDED

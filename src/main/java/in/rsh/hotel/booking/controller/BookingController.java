@@ -1,12 +1,16 @@
 package in.rsh.hotel.booking.controller;
 
+import in.rsh.hotel.booking.dto.BookingRequest;
+import in.rsh.hotel.booking.dto.BookingResponse;
+import in.rsh.hotel.booking.dto.UpdateBookingStatusRequest;
 import in.rsh.hotel.booking.model.Booking;
-import in.rsh.hotel.booking.model.Booking.BookingStatus;
 import in.rsh.hotel.booking.service.BookingService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,45 +31,55 @@ public class BookingController {
   }
 
   @GetMapping
-  public Iterable<Booking> getAllBookings() {
-    return bookingService.getAllBookings();
+  public ResponseEntity<?> getAllBookings() {
+    Iterable<Booking> bookings = bookingService.getAllBookings();
+    var responses =
+        StreamSupport.stream(bookings.spliterator(), false)
+            .map(this::toResponse)
+            .collect(Collectors.toList());
+    return ResponseEntity.ok(responses);
   }
 
   @GetMapping("/{id}")
-  public Booking getBooking(@PathVariable("id") int id) {
-    return bookingService.getBookingById(id);
+  public ResponseEntity<BookingResponse> getBooking(@PathVariable("id") int id) {
+    Booking booking = bookingService.getBookingById(id);
+    return ResponseEntity.ok(toResponse(booking));
   }
 
   @PostMapping
-  public Booking createBooking(@RequestBody CreateBookingRequest request) {
+  public ResponseEntity<BookingResponse> createBooking(
+      @Valid @RequestBody BookingRequest request) {
+    request.validate();
+    Booking booking;
     if (request.getRoomId() > 0) {
-      return bookingService.bookRoomByRoomId(
-          request.getPersonId(), request.getRoomId(), request.getStartTime(), request.getEndTime());
+      booking =
+          bookingService.bookRoomByRoomId(
+              request.getPersonId(),
+              request.getRoomId(),
+              request.getStartTime(),
+              request.getEndTime());
+    } else {
+      booking =
+          bookingService.bookRoomByStrategy(
+              request.getPersonId(), request.getStartTime(), request.getEndTime());
     }
-    return bookingService.bookRoomByStrategy(
-        request.getPersonId(), request.getStartTime(), request.getEndTime());
+    return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(booking));
   }
 
   @PatchMapping("/{id}")
-  public Booking updateStatus(
-      @PathVariable("id") int id, @RequestBody UpdateBookingStatusRequest request) {
-    return bookingService.updateBookingStatus(id, request.getStatus());
+  public ResponseEntity<BookingResponse> updateStatus(
+      @PathVariable("id") int id, @Valid @RequestBody UpdateBookingStatusRequest request) {
+    Booking booking = bookingService.updateBookingStatus(id, request.getStatus());
+    return ResponseEntity.ok(toResponse(booking));
   }
 
-  @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor
-  private static class UpdateBookingStatusRequest {
-    private BookingStatus status;
-  }
-
-  @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor
-  private static class CreateBookingRequest {
-    private int personId;
-    private int roomId;
-    private long startTime;
-    private long endTime;
+  private BookingResponse toResponse(Booking booking) {
+    return new BookingResponse(
+        booking.getId(),
+        booking.getPerson().getId(),
+        booking.getRoom().getId(),
+        booking.getStartTime(),
+        booking.getEndTime(),
+        booking.getStatus());
   }
 }

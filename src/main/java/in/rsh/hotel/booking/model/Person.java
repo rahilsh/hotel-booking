@@ -3,9 +3,11 @@ package in.rsh.hotel.booking.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class Person extends AbstractEntity {
 
   @Column(nullable = false)

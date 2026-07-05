@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 public class Room extends AbstractEntity {
 
@@ -30,6 +31,7 @@ public class Room extends AbstractEntity {
 
   public enum RoomStatus {
     AVAILABLE,
-    OCCUPIED
+    OCCUPIED,
+    MAINTENANCE
   }
 }

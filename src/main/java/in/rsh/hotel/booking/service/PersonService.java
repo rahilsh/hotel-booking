@@ -1,12 +1,15 @@
 package in.rsh.hotel.booking.service;
 
+import in.rsh.hotel.booking.exception.ResourceNotFoundException;
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.repository.PersonRepository;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class PersonService {
 
   private final PersonRepository personRepository;
@@ -17,23 +20,27 @@ public class PersonService {
   }
 
   public Iterable<Person> getAllPersons() {
+    log.debug("Fetching all persons");
     return personRepository.findAll();
   }
 
   public Person getPersonById(int id) {
-
+    log.debug("Fetching person with id: {}", id);
     final Optional<Person> optionalPerson = personRepository.findById(id);
     if (optionalPerson.isEmpty()) {
-      throw new IllegalArgumentException();
+      log.warn("Person not found with id: {}", id);
+      throw new ResourceNotFoundException("Person not found with id: " + id);
     }
     return optionalPerson.get();
   }
 
-  public void saveOrUpdate(Person person) {
-    personRepository.save(person);
+  public Person saveOrUpdate(Person person) {
+    log.debug("Saving or updating person: {}", person.getId());
+    return personRepository.save(person);
   }
 
   public void delete(int id) {
+    log.debug("Deleting person with id: {}", id);
     personRepository.deleteById(id);
   }
 }
