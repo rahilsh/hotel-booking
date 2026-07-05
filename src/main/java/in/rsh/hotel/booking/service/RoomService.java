@@ -39,8 +39,13 @@ public class RoomService {
   }
 
   public Room getRoomByIdAndStatus(int id, RoomStatus status) {
-    log.debug("Fetching room with id: {} and status: {}", id, status);
+    log.debug("Fetching room with id: {} and status: {} (with pessimistic write lock)", id, status);
     return getIfPresentOrThrow(roomRepository.findByIdAndStatus(id, status));
+  }
+
+  public Room getRoomByIdWithLock(int id) {
+    log.debug("Fetching room with id: {} (with pessimistic write lock)", id);
+    return getIfPresentOrThrow(roomRepository.findByIdWithPessimisticLock(id));
   }
 
   public Room saveOrUpdate(Room room) {
