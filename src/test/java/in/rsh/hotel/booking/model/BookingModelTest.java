@@ -11,7 +11,7 @@ class BookingModelTest {
   void testBuildBooking_Success() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
     hotel.setId(1);
-    Room room = new Room(1, hotel, Room.RoomStatus.AVAILABLE);
+    Room room = new Room(1, hotel, Room.RoomStatus.AVAILABLE, 0);
     room.setId(1);
 
     Person person = new Person();
@@ -34,7 +34,7 @@ class BookingModelTest {
   void testBuildBooking_InvalidTimeRange() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
     hotel.setId(1);
-    Room room = new Room(1, hotel, Room.RoomStatus.AVAILABLE);
+    Room room = new Room(1, hotel, Room.RoomStatus.AVAILABLE, 0);
     room.setId(1);
 
     Person person = new Person();

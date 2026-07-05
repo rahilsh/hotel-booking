@@ -2,7 +2,7 @@ package in.rsh.hotel.booking.service;
 
 import in.rsh.hotel.booking.exception.ResourceNotFoundException;
 import in.rsh.hotel.booking.model.Person;
-import in.rsh.hotel.booking.repository.PersonRepository;
+import in.rsh.hotel.booking.repository.PersonJdbcRepository;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PersonService {
 
-  private final PersonRepository personRepository;
+  private final PersonJdbcRepository personRepository;
 
   @Autowired
-  public PersonService(PersonRepository personRepository) {
+  public PersonService(PersonJdbcRepository personRepository) {
     this.personRepository = personRepository;
   }
 

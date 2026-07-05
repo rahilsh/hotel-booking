@@ -8,10 +8,10 @@ import in.rsh.hotel.booking.model.Hotel;
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
-import in.rsh.hotel.booking.repository.BookingRepository;
-import in.rsh.hotel.booking.repository.HotelRepository;
-import in.rsh.hotel.booking.repository.PersonRepository;
-import in.rsh.hotel.booking.repository.RoomRepository;
+import in.rsh.hotel.booking.repository.BookingJdbcRepository;
+import in.rsh.hotel.booking.repository.HotelJdbcRepository;
+import in.rsh.hotel.booking.repository.PersonJdbcRepository;
+import in.rsh.hotel.booking.repository.RoomJdbcRepository;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +25,10 @@ import org.springframework.test.context.ActiveProfiles;
 class ConcurrencyTest {
 
   @Autowired private BookingService bookingService;
-  @Autowired private BookingRepository bookingRepository;
-  @Autowired private RoomRepository roomRepository;
-  @Autowired private PersonRepository personRepository;
-  @Autowired private HotelRepository hotelRepository;
+  @Autowired private BookingJdbcRepository bookingRepository;
+  @Autowired private RoomJdbcRepository roomRepository;
+  @Autowired private PersonJdbcRepository personRepository;
+  @Autowired private HotelJdbcRepository hotelRepository;
 
   private Hotel hotel;
   private Room room;
@@ -45,7 +45,7 @@ class ConcurrencyTest {
     hotel = new Hotel("Test Hotel", "Test City");
     hotel = hotelRepository.save(hotel);
 
-    room = new Room(1, hotel, RoomStatus.AVAILABLE);
+    room = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room = roomRepository.save(room);
 
     person1 = new Person();
@@ -113,7 +113,7 @@ class ConcurrencyTest {
 
   @Test
   void testSequentialBookings_BothSucceedWithDifferentRooms() {
-    Room room2 = new Room(2, hotel, RoomStatus.AVAILABLE);
+    Room room2 = new Room(2, hotel, RoomStatus.AVAILABLE, 0);
     room2 = roomRepository.save(room2);
 
     Booking booking1 =

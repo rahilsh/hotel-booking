@@ -1,33 +1,19 @@
 package in.rsh.hotel.booking.model;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Room extends AbstractEntity {
-
-  @Version protected int versionNumber = 0;
-
   private int floorId;
-
-  @ManyToOne(optional = false)
   private Hotel hotel;
-
-  @Column(nullable = false)
-  @Setter
-  @Enumerated(EnumType.STRING)
   private RoomStatus status;
-
-  public Room(int floorId, Hotel hotel, RoomStatus status) {
-    this.floorId = floorId;
-    this.hotel = hotel;
-    this.status = status;
-  }
-
-  public Room() {}
+  private int versionNumber;
 
   public enum RoomStatus {
     AVAILABLE,

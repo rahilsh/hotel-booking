@@ -1,34 +1,15 @@
 package in.rsh.hotel.booking.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Entity
+@Setter
 public class Booking extends AbstractEntity {
-
-  @ManyToOne(optional = false)
-  @Setter
   private Person person;
-
-  @ManyToOne @Setter private Room room;
-
-  @Column(nullable = false)
-  @Setter
+  private Room room;
   private long startTime;
-
-  @Column(nullable = false)
-  @Setter
   private long endTime;
-
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  @Setter
   private BookingStatus status;
 
   public static Booking buildBooking(long startTime, long endTime, Room room, Person person) {

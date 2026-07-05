@@ -8,7 +8,7 @@ import in.rsh.hotel.booking.exception.ResourceNotFoundException;
 import in.rsh.hotel.booking.model.Hotel;
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
-import in.rsh.hotel.booking.repository.RoomRepository;
+import in.rsh.hotel.booking.repository.RoomJdbcRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class RoomServiceTest {
 
-  @Mock private RoomRepository roomRepository;
+  @Mock private RoomJdbcRepository roomRepository;
 
   private RoomService roomService;
 
@@ -33,9 +33,9 @@ class RoomServiceTest {
   @Test
   void testGetAllRooms() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
-    Room room1 = new Room(1, hotel, RoomStatus.AVAILABLE);
+    Room room1 = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room1.setId(1);
-    Room room2 = new Room(2, hotel, RoomStatus.OCCUPIED);
+    Room room2 = new Room(2, hotel, RoomStatus.OCCUPIED, 0);
     room2.setId(2);
 
     List<Room> rooms = Arrays.asList(room1, room2);
@@ -50,7 +50,7 @@ class RoomServiceTest {
   @Test
   void testGetRoomById_Success() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
-    Room room = new Room(1, hotel, RoomStatus.AVAILABLE);
+    Room room = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room.setId(1);
 
     when(roomRepository.findById(1)).thenReturn(Optional.of(room));
@@ -74,7 +74,7 @@ class RoomServiceTest {
   @Test
   void testGetRoomByIdAndStatus_Success() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
-    Room room = new Room(1, hotel, RoomStatus.AVAILABLE);
+    Room room = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room.setId(1);
 
     when(roomRepository.findByIdAndStatus(1, RoomStatus.AVAILABLE)).thenReturn(Optional.of(room));
@@ -99,9 +99,9 @@ class RoomServiceTest {
   @Test
   void testGetRoomByStatus() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
-    Room room1 = new Room(1, hotel, RoomStatus.AVAILABLE);
+    Room room1 = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room1.setId(1);
-    Room room2 = new Room(2, hotel, RoomStatus.AVAILABLE);
+    Room room2 = new Room(2, hotel, RoomStatus.AVAILABLE, 0);
     room2.setId(2);
 
     List<Room> rooms = Arrays.asList(room1, room2);
@@ -117,7 +117,7 @@ class RoomServiceTest {
   @Test
   void testSaveOrUpdate() {
     Hotel hotel = new Hotel("Ibis", "Mumbai");
-    Room room = new Room(1, hotel, RoomStatus.AVAILABLE);
+    Room room = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room.setId(1);
 
     when(roomRepository.findById(1)).thenReturn(Optional.of(room));

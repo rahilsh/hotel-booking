@@ -13,7 +13,7 @@ import in.rsh.hotel.booking.model.Hotel;
 import in.rsh.hotel.booking.model.Person;
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
-import in.rsh.hotel.booking.repository.BookingRepository;
+import in.rsh.hotel.booking.repository.BookingJdbcRepository;
 import in.rsh.hotel.booking.strategy.BookingStrategy;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
-  @Mock private BookingRepository bookingRepository;
+  @Mock private BookingJdbcRepository bookingRepository;
   @Mock private RoomService roomService;
   @Mock private PersonService personService;
   @Mock private BookingStrategy bookingStrategy;
@@ -52,7 +52,7 @@ class BookingServiceTest {
     person.setAge(25);
     person.setEmailId("john@example.com");
 
-    room = new Room(1, hotel, RoomStatus.AVAILABLE);
+    room = new Room(1, hotel, RoomStatus.AVAILABLE, 0);
     room.setId(1);
   }
 

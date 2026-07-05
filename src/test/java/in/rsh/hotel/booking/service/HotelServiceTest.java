@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import in.rsh.hotel.booking.exception.ResourceNotFoundException;
 import in.rsh.hotel.booking.model.Hotel;
-import in.rsh.hotel.booking.repository.HotelRepository;
+import in.rsh.hotel.booking.repository.HotelJdbcRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class HotelServiceTest {
 
-  @Mock private HotelRepository hotelRepository;
+  @Mock private HotelJdbcRepository hotelRepository;
 
   private HotelService hotelService;
 

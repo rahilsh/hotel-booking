@@ -12,7 +12,7 @@ import in.rsh.hotel.booking.model.Booking;
 import in.rsh.hotel.booking.model.Booking.BookingStatus;
 import in.rsh.hotel.booking.model.Room;
 import in.rsh.hotel.booking.model.Room.RoomStatus;
-import in.rsh.hotel.booking.repository.BookingRepository;
+import in.rsh.hotel.booking.repository.BookingJdbcRepository;
 import in.rsh.hotel.booking.strategy.BookingStrategy;
 import java.util.List;
 import java.util.Optional;
@@ -27,14 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class BookingService {
 
-  private final BookingRepository bookingRepository;
+  private final BookingJdbcRepository bookingRepository;
   private final RoomService roomService;
   private final PersonService personService;
   private final BookingStrategy defaultStrategy;
 
   @Autowired
   public BookingService(
-      BookingRepository bookingRepository,
+      BookingJdbcRepository bookingRepository,
       RoomService roomService,
       PersonService personService,
       BookingStrategy defaultStrategy) {
