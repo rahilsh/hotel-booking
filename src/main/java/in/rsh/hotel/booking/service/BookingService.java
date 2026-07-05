@@ -16,8 +16,10 @@ import in.rsh.hotel.booking.repository.BookingRepository;
 import in.rsh.hotel.booking.strategy.BookingStrategy;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,20 @@ public class BookingService {
 
   public Iterable<Booking> getAllBookings() {
     return bookingRepository.findAll();
+  }
+
+  public List<Booking> getAllBookings(Pageable pageable, Integer personId, Integer roomId) {
+    log.debug("Fetching bookings with pagination and filters");
+    if (personId != null) {
+      return bookingRepository.findByPersonId(personId, pageable).stream()
+          .collect(Collectors.toList());
+    } else if (roomId != null) {
+      return bookingRepository.findByRoomId(roomId, pageable).stream()
+          .collect(Collectors.toList());
+    } else {
+      return bookingRepository.findAll(pageable).stream()
+          .collect(Collectors.toList());
+    }
   }
 
   public Booking getBookingById(int id) {

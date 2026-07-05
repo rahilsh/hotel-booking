@@ -6,6 +6,8 @@ import in.rsh.hotel.booking.repository.HotelRepository;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +24,11 @@ public class HotelService {
   public Iterable<Hotel> getAllHotels() {
     log.debug("Fetching all hotels");
     return hotelRepository.findAll();
+  }
+
+  public Page<Hotel> getAllHotels(Pageable pageable) {
+    log.debug("Fetching hotels with pagination");
+    return hotelRepository.findAll(pageable);
   }
 
   public Hotel getHotelById(int id) {

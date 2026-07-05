@@ -6,6 +6,8 @@ import in.rsh.hotel.booking.repository.PersonRepository;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +24,11 @@ public class PersonService {
   public Iterable<Person> getAllPersons() {
     log.debug("Fetching all persons");
     return personRepository.findAll();
+  }
+
+  public Page<Person> getAllPersons(Pageable pageable) {
+    log.debug("Fetching persons with pagination: page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+    return personRepository.findAll(pageable);
   }
 
   public Person getPersonById(int id) {

@@ -8,8 +8,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface RoomRepository extends CrudRepository<Room, Integer> {
+public interface RoomRepository extends CrudRepository<Room, Integer>, PagingAndSortingRepository<Room, Integer> {
 
   @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
   Optional<Room> findById(int id);
