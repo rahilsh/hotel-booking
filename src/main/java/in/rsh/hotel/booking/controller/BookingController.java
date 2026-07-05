@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/v1/bookings")
 public class BookingController {
 
   private final BookingService bookingService;
