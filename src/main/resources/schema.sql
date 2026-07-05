@@ -41,6 +41,20 @@ CREATE TABLE IF NOT EXISTS booking (
   FOREIGN KEY (room_id) REFERENCES room(id)
 );
 
+CREATE TABLE IF NOT EXISTS payment (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  booking_id INT NOT NULL,
+  amount DECIMAL(10, 2) NOT NULL,
+  currency VARCHAR(10) NOT NULL DEFAULT 'USD',
+  status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+  payment_method VARCHAR(50),
+  transaction_id VARCHAR(255) UNIQUE,
+  failure_reason VARCHAR(500),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (booking_id) REFERENCES booking(id)
+);
+
 -- Create indexes separately for better compatibility
 CREATE INDEX IF NOT EXISTS idx_hotel ON room(hotel_id);
 CREATE INDEX IF NOT EXISTS idx_room_status ON room(status);
@@ -48,3 +62,6 @@ CREATE INDEX IF NOT EXISTS idx_person ON booking(person_id);
 CREATE INDEX IF NOT EXISTS idx_room ON booking(room_id);
 CREATE INDEX IF NOT EXISTS idx_booking_status ON booking(status);
 CREATE INDEX IF NOT EXISTS idx_time_range ON booking(start_time, end_time);
+CREATE INDEX IF NOT EXISTS idx_payment_booking ON payment(booking_id);
+CREATE INDEX IF NOT EXISTS idx_payment_status ON payment(status);
+CREATE INDEX IF NOT EXISTS idx_transaction_id ON payment(transaction_id);
