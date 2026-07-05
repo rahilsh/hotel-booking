@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS hotel (
   name VARCHAR(255) NOT NULL,
   city VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS person (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS person (
   age INT NOT NULL,
   email_id VARCHAR(255) NOT NULL UNIQUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS room (
@@ -24,10 +24,8 @@ CREATE TABLE IF NOT EXISTS room (
   status VARCHAR(50) NOT NULL DEFAULT 'AVAILABLE',
   version_number INT DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (hotel_id) REFERENCES hotel(id),
-  INDEX idx_hotel (hotel_id),
-  INDEX idx_status (status)
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (hotel_id) REFERENCES hotel(id)
 );
 
 CREATE TABLE IF NOT EXISTS booking (
@@ -38,11 +36,15 @@ CREATE TABLE IF NOT EXISTS booking (
   end_time BIGINT NOT NULL,
   status VARCHAR(50) NOT NULL DEFAULT 'BOOKED',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id) REFERENCES person(id),
-  FOREIGN KEY (room_id) REFERENCES room(id),
-  INDEX idx_person (person_id),
-  INDEX idx_room (room_id),
-  INDEX idx_status (status),
-  INDEX idx_time_range (start_time, end_time)
+  FOREIGN KEY (room_id) REFERENCES room(id)
 );
+
+-- Create indexes separately for better compatibility
+CREATE INDEX IF NOT EXISTS idx_hotel ON room(hotel_id);
+CREATE INDEX IF NOT EXISTS idx_room_status ON room(status);
+CREATE INDEX IF NOT EXISTS idx_person ON booking(person_id);
+CREATE INDEX IF NOT EXISTS idx_room ON booking(room_id);
+CREATE INDEX IF NOT EXISTS idx_booking_status ON booking(status);
+CREATE INDEX IF NOT EXISTS idx_time_range ON booking(start_time, end_time);

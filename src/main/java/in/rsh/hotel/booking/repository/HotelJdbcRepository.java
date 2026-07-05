@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,7 +30,14 @@ public class HotelJdbcRepository implements BaseRepository<Hotel, Integer> {
     if (hotel.getId() == 0) {
       log.debug("Inserting new hotel: {}", hotel.getName());
       String sql = "INSERT INTO hotel (name, city) VALUES (?, ?)";
-      jdbcTemplate.update(sql, hotel.getName(), hotel.getCity());
+      KeyHolder keyHolder = new GeneratedKeyHolder();
+      jdbcTemplate.update(con -> {
+        var ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setString(1, hotel.getName());
+        ps.setString(2, hotel.getCity());
+        return ps;
+      }, keyHolder);
+      hotel.setId(keyHolder.getKey().intValue());
     } else {
       log.debug("Updating hotel: {}", hotel.getId());
       String sql = "UPDATE hotel SET name = ?, city = ? WHERE id = ?";

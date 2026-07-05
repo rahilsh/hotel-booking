@@ -9,6 +9,7 @@ import in.rsh.hotel.booking.repository.RoomJdbcRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,15 +18,29 @@ public class H2Bootstrap implements CommandLineRunner {
 
   private final RoomJdbcRepository roomRepository;
   private final HotelJdbcRepository hotelRepository;
+  private final Environment env;
 
   @Autowired
-  public H2Bootstrap(RoomJdbcRepository roomRepository, HotelJdbcRepository hotelRepository) {
+  public H2Bootstrap(
+      RoomJdbcRepository roomRepository,
+      HotelJdbcRepository hotelRepository,
+      Environment env) {
     this.roomRepository = roomRepository;
     this.hotelRepository = hotelRepository;
+    this.env = env;
   }
 
   @Override
   public void run(String... args) {
+    // Skip bootstrapping in test profile
+    String[] profiles = env.getActiveProfiles();
+    for (String profile : profiles) {
+      if ("test".equals(profile)) {
+        log.info("Skipping bootstrap in test profile");
+        return;
+      }
+    }
+
     log.info("Bootstrapping data");
     Hotel hotel = new Hotel("Ibis", "Mumbai");
     hotelRepository.save(hotel);

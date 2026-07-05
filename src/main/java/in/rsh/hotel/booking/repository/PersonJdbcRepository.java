@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,7 +30,15 @@ public class PersonJdbcRepository implements BaseRepository<Person, Integer> {
     if (person.getId() == 0) {
       log.debug("Inserting new person: {}", person.getEmailId());
       String sql = "INSERT INTO person (name, age, email_id) VALUES (?, ?, ?)";
-      jdbcTemplate.update(sql, person.getName(), person.getAge(), person.getEmailId());
+      KeyHolder keyHolder = new GeneratedKeyHolder();
+      jdbcTemplate.update(con -> {
+        var ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setString(1, person.getName());
+        ps.setInt(2, person.getAge());
+        ps.setString(3, person.getEmailId());
+        return ps;
+      }, keyHolder);
+      person.setId(keyHolder.getKey().intValue());
     } else {
       log.debug("Updating person: {}", person.getId());
       String sql = "UPDATE person SET name = ?, age = ?, email_id = ? WHERE id = ?";

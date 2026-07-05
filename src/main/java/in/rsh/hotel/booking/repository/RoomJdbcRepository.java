@@ -14,6 +14,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -52,8 +54,16 @@ public class RoomJdbcRepository implements BaseRepository<Room, Integer> {
     if (room.getId() == 0) {
       log.debug("Inserting new room: floor={}", room.getFloorId());
       String sql = "INSERT INTO room (floor_id, hotel_id, status, version_number) VALUES (?, ?, ?, ?)";
-      jdbcTemplate.update(sql, room.getFloorId(), room.getHotel().getId(),
-          room.getStatus().toString(), 0);
+      KeyHolder keyHolder = new GeneratedKeyHolder();
+      jdbcTemplate.update(con -> {
+        var ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setInt(1, room.getFloorId());
+        ps.setInt(2, room.getHotel().getId());
+        ps.setString(3, room.getStatus().toString());
+        ps.setInt(4, 0);
+        return ps;
+      }, keyHolder);
+      room.setId(keyHolder.getKey().intValue());
     } else {
       log.debug("Updating room: {}", room.getId());
       String sql = "UPDATE room SET floor_id = ?, hotel_id = ?, status = ?, version_number = ? WHERE id = ?";

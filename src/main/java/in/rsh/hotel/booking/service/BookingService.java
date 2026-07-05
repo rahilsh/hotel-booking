@@ -99,14 +99,16 @@ public class BookingService {
         throw new InvalidBookingException("Start time must be before end time");
       }
 
+      // Lock room FIRST with pessimistic locking to prevent race conditions
+      Room room = roomService.getRoomByIdAndStatus(roomId, RoomStatus.AVAILABLE);
+
+      // NOW check for overlapping bookings while holding the lock
       if (hasOverlappingBooking(roomId, startTime, endTime)) {
         log.warn(
             "Room {} has overlapping booking for time range {} to {}", roomId, startTime, endTime);
         throw new RoomNotAvailableException(
             "Room is not available for the requested time period");
       }
-
-      Room room = roomService.getRoomByIdAndStatus(roomId, RoomStatus.AVAILABLE);
 
       markRoomAsOccupied(room);
 

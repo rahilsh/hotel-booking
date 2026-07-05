@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -60,8 +62,17 @@ public class BookingJdbcRepository implements BaseRepository<Booking, Integer> {
       log.debug("Inserting new booking");
       String sql =
           "INSERT INTO booking (person_id, room_id, start_time, end_time, status) VALUES (?, ?, ?, ?, ?)";
-      jdbcTemplate.update(sql, booking.getPerson().getId(), booking.getRoom().getId(),
-          booking.getStartTime(), booking.getEndTime(), booking.getStatus().toString());
+      KeyHolder keyHolder = new GeneratedKeyHolder();
+      jdbcTemplate.update(con -> {
+        var ps = con.prepareStatement(sql, new String[]{"id"});
+        ps.setInt(1, booking.getPerson().getId());
+        ps.setInt(2, booking.getRoom().getId());
+        ps.setLong(3, booking.getStartTime());
+        ps.setLong(4, booking.getEndTime());
+        ps.setString(5, booking.getStatus().toString());
+        return ps;
+      }, keyHolder);
+      booking.setId(keyHolder.getKey().intValue());
     } else {
       log.debug("Updating booking: {}", booking.getId());
       String sql =
